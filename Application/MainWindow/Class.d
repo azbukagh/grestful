@@ -379,16 +379,30 @@ protected:
 
         with (this.addNewRequestPopover = new Popover(this.getWidget("saveNewRequestButton")))
         {
+            auto confirmAddNewRequestButton = this.getWidget("confirmAddNewRequestButton");
+
+            this.getWidget!Entry("newRequestNameEntry").setConfirmationButton(confirmAddNewRequestButton);
+
             add(this.getWidget("addNewRequestPopoverBox"));
         }
 
         with (this.addRequestHeaderPopover = new Popover(this.getWidget("addRequestHeaderButton")))
         {
+            auto confirmAddNewRequestHeaderButton = this.getWidget("confirmAddNewRequestHeaderButton");
+
+            this.getWidget!Entry("requestHeaderNameEntry").setConfirmationButton(confirmAddNewRequestHeaderButton);
+            this.getWidget!Entry("requestHeaderValueEntry").setConfirmationButton(confirmAddNewRequestHeaderButton);
+
             add(this.getWidget("addRequestHeaderPopoverBox"));
         }
 
         with (this.authenticationHeaderPopover = new Popover(this.getWidget("generateAuthenticationHeaderButton")))
         {
+            auto confirmGenerateAuthenticationHeaderButton = this.getWidget("confirmGenerateAuthenticationHeaderButton");
+
+            this.getWidget!Entry("authenticationHeaderUserEntry").setConfirmationButton(confirmGenerateAuthenticationHeaderButton);
+            this.getWidget!Entry("authenticationHeaderPasswordEntry").setConfirmationButton(confirmGenerateAuthenticationHeaderButton);
+
             add(this.getWidget("authenticationHeaderPopoverBox"));
         }
     }

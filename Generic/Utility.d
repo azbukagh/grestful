@@ -195,6 +195,22 @@ T getAncestorOfType(T)(Widget widget)
 }
 
 /**
+ * Maps a widget to the specified entry, causing its activation (e.g. by pressing the return key in the entry input
+ * field) to confirm the current action by 'activating' (i.e. pressing) the specified button. For example, this can be
+ * used to map all form fields to a save button, causing a press of the return key in each of the form fields to
+ * trigger the save.
+ *
+ * @param entry
+ * @param widgetToActivate
+ */
+void setConfirmationButton(gtk.Entry.Entry entry, Widget widgetToActivate)
+{
+    entry.addOnActivate((gtk.Entry.Entry sender) {
+        widgetToActivate.activate();
+    });
+}
+
+/**
  * Some utility functions extending the KeyFile class.
  */
 private bool hasGroupAndKey(KeyFile file, string groupName, string key)
