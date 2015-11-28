@@ -328,7 +328,7 @@ void threadsAddIdleDelegate(T, parameterTuple...)(T theDelegate, parameterTuple 
     core.memory.GC.addRoot(delegatePointer);
 
     gdk.Threads.threadsAddIdle(
-        cast(GSourceFunc) &invokeDelegatePointerFunc!(DelegatePointer!(T, parameterTuple), bool),
+        &invokeDelegatePointerFunc!(DelegatePointer!(T, parameterTuple), int),
         delegatePointer
     );
 }
