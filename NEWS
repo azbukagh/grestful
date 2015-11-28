@@ -1,4 +1,7 @@
-===== 1.1.1 (not released yet)
+===== ?.?.? (not released yet)
+    - Ensure a pointer doesn't get collected too soon, which in theory could lead to a crash during transfer.
+
+===== 1.1.1 (10 October 2015)
     - Fixed not being able to call sites with self-signed certificates due to cURL trying to verify the certificates.
 
 ===== 1.1.0 (14 August 2015)
