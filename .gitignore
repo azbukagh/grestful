@@ -1,6 +1,7 @@
 *.userprefs
 .dub
 .atom-build.json
+.build-tools.cson
 dub_platform_probe.o
 dub.selections.json
 grestful
