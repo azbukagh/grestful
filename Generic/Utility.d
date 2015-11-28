@@ -257,16 +257,15 @@ auto getStringListDefault(KeyFile file, string groupName, string key, string[] d
 
 /**
  * Callback that will invoke the passed DelegatePointer's delegate when it is called. This very useful method can be
- * used to pass delegates to gdk.Threads.threadsAddIdle instead of having to define a callback with C linkage and a
- * different method for every different action.
+ * used to pass delegates in places where callbacks with C linkage are expected (such as GSourceFunc).
  *
  * The return type is the type that should be returned by this function. The invoked delegate should as a best practice
  * return the same value. If an exception happens and the value from the delegate can't be returned, the '.init' value
  * of the type will be used instead (or nothing in the case of void).
  *
- * @param data The data that is passed to the method.
+ * @param data Should contain a pointer to the the DelegatePointer instance.
  *
- * @return Whether or not the method should continue executing.
+ * @return Whatever the delegate returns.
  */
 extern(C) nothrow static ReturnType invokeDelegatePointerFunc(S, ReturnType)(void* data)
 {
