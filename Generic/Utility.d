@@ -264,22 +264,25 @@ auto getStringListDefault(KeyFile file, string groupName, string key, string[] d
   *
   * @return Whether or not the method should continue executing.
   */
- extern(C) nothrow static bool invokeDelegatePointerFunc(S)(void* data)
- {
-     try
-     {
-         auto callbackPointer = cast(S*) data;
+extern(C) nothrow static ReturnType invokeDelegatePointerFunc(S, ReturnType)(void* data)
+{
+    auto callbackPointer = cast(S*) data;
 
-         callbackPointer.delegateInstance(callbackPointer.parameters);
-     }
+    try
+    {
+        return cast(ReturnType) callbackPointer.delegateInstance(callbackPointer.parameters);
+    }
 
-     catch (Exception e)
-     {
-         // Just catch it, can't throw D exceptions accross C boundaries.
-     }
+    catch (Exception e)
+    {
+        // Just catch it, can't throw D exceptions accross C boundaries.
+        static if (__traits(compiles, ReturnType.init))
+            return ReturnType.init;
 
-     return false;
- }
+        else
+            return; // Void doesn't have an initial value.
+    }
+}
 
 /**
  * Convenience method that allows scheduling a delegate to be executed with gdk.Threads.threadsAddIdle instead of a
@@ -295,7 +298,7 @@ auto getStringListDefault(KeyFile file, string groupName, string key, string[] d
 void threadsAddIdleDelegate(T, parameterTuple...)(T theDelegate, parameterTuple parameters)
 {
     gdk.Threads.threadsAddIdle(
-        cast(GSourceFunc) &invokeDelegatePointerFunc!(DelegatePointer!(T, parameterTuple)),
+        cast(GSourceFunc) &invokeDelegatePointerFunc!(DelegatePointer!(T, parameterTuple), bool),
         cast(void*) new DelegatePointer!(T, parameterTuple)(theDelegate, parameters)
     );
 }
