@@ -264,46 +264,21 @@ auto getStringListDefault(KeyFile file, string groupName, string key, string[] d
   * return the same value. If an exception happens and the value from the delegate can't be returned, the '.init' value
   * of the type will be used instead (or nothing in the case of void).
   *
-  * Finally, if doRemoveRoot is set to true, this function will execute a removeRoot on the garbage collector for the
-  * passed data (which is the delegate). This is useful in situations where you're passing a delegate to a C function
-  * that will happen asynchronously, in which case you should be adding the newly allocated DelegatePointer using
-  * addRoot to ensure the garbage collector doesn't attempt to collect the delegate while the callback hasn't been
-  * invoked yet.
-  *
   * @param data The data that is passed to the method.
   *
   * @return Whether or not the method should continue executing.
   */
-extern(C) nothrow static ReturnType invokeDelegatePointerFunc(S, ReturnType, bool doRemoveRoot = false)(void* data)
+extern(C) nothrow static ReturnType invokeDelegatePointerFunc(S, ReturnType)(void* data)
 {
     auto callbackPointer = cast(S*) data;
 
     try
     {
-        static if (__traits(compiles, ReturnType.init))
-        {
-            auto returnValue = callbackPointer.delegateInstance(callbackPointer.parameters);
-
-            static if (doRemoveRoot)
-                core.memory.GC.removeRoot(data);
-
-            return returnValue;
-        }
-
-        else
-        {
-            callbackPointer.delegateInstance(callbackPointer.parameters);
-
-            static if (doRemoveRoot)
-                core.memory.GC.removeRoot(data);
-        }
+        return cast(ReturnType) callbackPointer.delegateInstance(callbackPointer.parameters);
     }
 
     catch (Exception e)
     {
-        static if (doRemoveRoot)
-            core.memory.GC.removeRoot(data);
-
         // Just catch it, can't throw D exceptions accross C boundaries.
         static if (__traits(compiles, ReturnType.init))
             return ReturnType.init;
@@ -325,14 +300,35 @@ extern(C) nothrow static ReturnType invokeDelegatePointerFunc(S, ReturnType, boo
  */
 void threadsAddIdleDelegate(T, parameterTuple...)(T theDelegate, parameterTuple parameters)
 {
-    auto delegatePointer = cast(void*) new DelegatePointer!(T, parameterTuple)(theDelegate, parameters);
+    void* delegatePointer = null;
+
+    auto wrapperDelegate = (parameterTuple parameters) {
+        bool callAgainNextIdleCycle = false;
+
+        try
+        {
+            callAgainNextIdleCycle = theDelegate(parameters);
+        }
+
+        catch (Exception e)
+        {
+            // Catch exceptions here as otherwise, memory may never be freed below.
+        }
+
+        if (!callAgainNextIdleCycle)
+            core.memory.GC.removeRoot(delegatePointer);
+
+        return callAgainNextIdleCycle;
+    };
+
+    delegatePointer = cast(void*) new DelegatePointer!(T, parameterTuple)(wrapperDelegate, parameters);
 
     // We're going into a separate thread and exiting here, make sure the garbage collector doesn't think the memory
     // isn't used anymore and collects it.
     core.memory.GC.addRoot(delegatePointer);
 
     gdk.Threads.threadsAddIdle(
-        cast(GSourceFunc) &invokeDelegatePointerFunc!(DelegatePointer!(T, parameterTuple), bool, true),
+        cast(GSourceFunc) &invokeDelegatePointerFunc!(DelegatePointer!(T, parameterTuple), bool),
         delegatePointer
     );
 }
