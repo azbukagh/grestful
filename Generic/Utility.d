@@ -248,28 +248,24 @@ auto getStringListDefault(KeyFile file, string groupName, string key, string[] d
     return file.hasGroupAndKey(groupName, key) ? file.getStringList(groupName, key) : defaultValue;
 }
 
- /**
-  * Simple structure that contains a pointer to a delegate. This is necessary because delegates are not directly
-  * convertable to a simple pointer (which is needed to pass as data to a C callback).
-  */
- struct DelegatePointer(S, U...)
- {
-     S delegateInstance;
+/**
+ * Simple structure that contains a pointer to a delegate. This is necessary because delegates are not directly
+ * convertable to a simple pointer (which is needed to pass as data to a C callback).
+ */
+struct DelegatePointer(ReturnType, Parameters...)
+{
+    ReturnType delegate(Parameters) delegateInstance;
 
-     U parameters;
-
-     /**
-      * Constructor.
-      *
-      * @param delegateInstance The delegate to invoke.
-      * @param parameters       The parameters to pass to the delegate.
-      */
-     public this(S delegateInstance, U parameters)
-     {
-         this.delegateInstance = delegateInstance;
-         this.parameters = parameters;
-     }
- }
+    /**
+     * Constructor.
+     *
+     * @param delegateInstance The delegate to invoke.
+     */
+    public this(ReturnType delegate(Parameters) delegateInstance)
+    {
+        this.delegateInstance = delegateInstance;
+    }
+}
 
 /**
  * Callback that will invoke the passed DelegatePointer's delegate when it is called. This very useful method can be
@@ -279,17 +275,19 @@ auto getStringListDefault(KeyFile file, string groupName, string key, string[] d
  * return the same value. If an exception happens and the value from the delegate can't be returned, the '.init' value
  * of the type will be used instead (or nothing in the case of void).
  *
- * @param data Should contain a pointer to the the DelegatePointer instance.
+ * @param parameters      Parameters that are passed to the callback function.
+ * @param delegatePointer Should contain a pointer to the the DelegatePointer instance.
  *
  * @return Whatever the delegate returns.
  */
-extern(C) nothrow static ReturnType invokeDelegatePointerFunc(S, ReturnType)(void* data)
-{
-    auto callbackPointer = cast(S*) data;
-
+extern(C) nothrow static ReturnType invokeDelegatePointerFunc(DataType, ReturnType, Parameters...)(
+    Parameters parameters,
+    void* delegatePointer
+) {
     try
     {
-        return cast(ReturnType) callbackPointer.delegateInstance(callbackPointer.parameters);
+        // Explicit cast needed for void return types.
+        return cast(ReturnType) (cast(DataType) delegatePointer).delegateInstance(parameters);
     }
 
     catch (Exception e)
@@ -303,26 +301,43 @@ extern(C) nothrow static ReturnType invokeDelegatePointerFunc(S, ReturnType)(voi
 }
 
 /**
+ * Takes a delegate and returns a tuple containing a reference to a function with C linkage that can be
+ * passed as callback to various methods that require one from GTK. The second element of the tuple is
+ * a void pointer that must be passed as the 'user data' along with the callback with C linkage.
+ */
+auto delegateToCallbackTuple(ReturnType, Parameters...)(ReturnType delegate(Parameters) theDelegate)
+{
+    import std.typecons : Tuple;
+
+    auto delegatePointer = new DelegatePointer!(ReturnType, Parameters)(theDelegate);
+
+    auto callback = &invokeDelegatePointerFunc!(typeof(delegatePointer), ReturnType, Parameters);
+    auto dataForCallback = cast(void*) delegatePointer;
+
+    return Tuple!(typeof(callback), "callback", typeof(dataForCallback), "data")(
+        callback,
+        dataForCallback
+    );
+}
+
+/**
  * Convenience method that allows scheduling a delegate to be executed with gdk.Threads.threadsAddIdle instead of a
  * traditional callback with C linkage.
  *
  * @param theDelegate The delegate to schedule.
- * @param parameters  A tuple of parameters to pass to the delegate when it is invoked.
  *
- * @example
- *     auto myMethod = delegate(string name, string value) { do_something_with_name_and_value(); }
- *     threadsAddIdleDelegate(myMethod, "thisIsAName", "thisIsAValue");
+ * @example threadsAddIdleDelegate(delegate() { do_something(); return false; });
  */
-void threadsAddIdleDelegate(T, parameterTuple...)(T theDelegate, parameterTuple parameters)
+void threadsAddIdleDelegate(int delegate() theDelegate)
 {
-    void* delegatePointer = null;
+    void* delegatePointerToFree = null;
 
-    auto wrapperDelegate = (parameterTuple parameters) {
-        bool callAgainNextIdleCycle = false;
+    auto wrapperDelegate = delegate() {
+        int callAgainNextIdleCycle = false;
 
         try
         {
-            callAgainNextIdleCycle = theDelegate(parameters);
+            callAgainNextIdleCycle = theDelegate();
         }
 
         catch (Exception e)
@@ -331,19 +346,18 @@ void threadsAddIdleDelegate(T, parameterTuple...)(T theDelegate, parameterTuple 
         }
 
         if (!callAgainNextIdleCycle)
-            core.memory.GC.removeRoot(delegatePointer);
+            core.memory.GC.removeRoot(delegatePointerToFree);
 
-        return callAgainNextIdleCycle;
+        return cast(int) callAgainNextIdleCycle;
     };
 
-    delegatePointer = cast(void*) new DelegatePointer!(T, parameterTuple)(wrapperDelegate, parameters);
+    auto callbackTuple = delegateToCallbackTuple(wrapperDelegate);
+
+    delegatePointerToFree = callbackTuple.data;
 
     // We're going into a separate thread and exiting here, make sure the garbage collector doesn't think the memory
     // isn't used anymore and collects it.
-    core.memory.GC.addRoot(delegatePointer);
+    core.memory.GC.addRoot(delegatePointerToFree);
 
-    gdk.Threads.threadsAddIdle(
-        &invokeDelegatePointerFunc!(DelegatePointer!(T, parameterTuple), int),
-        delegatePointer
-    );
+    gdk.Threads.threadsAddIdle(callbackTuple.callback, callbackTuple.data);
 }

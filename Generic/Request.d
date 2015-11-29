@@ -98,7 +98,7 @@ public:
         auto FinishedCallback()
         {
             return () {
-                threadsAddIdleDelegate(() {
+                threadsAddIdleDelegate(delegate() {
                     this.finishedCallback();
 
                     return false; // Remove the source, i.e. invoke this callback only once on idle and then remove it.
