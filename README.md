@@ -37,7 +37,5 @@ New features from this point on are unlikely, seeing as I consider the applicati
 
 On the same line, this client was developed primarily with Linux in mind, I did not test or intend to officially develop for Windows or Mac. I will on the other hand not turn down any pull requests that perform bug fixes towards those platforms based solely on that reason.
 
-###### Do you accept donations?
+###### Regarding donations
 I do accept donations and am very grateful for any donation you may give, but they were not my primary intention when releasing this application as open source. As such, a link to the (PayPal) donation screen is located [here](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LVVC23MQPSLJC), at the bottom of the readme, hidden from initial sight and not even in the form of a fancy button ;-).
-
-
