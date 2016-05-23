@@ -260,13 +260,13 @@ protected:
                 Button collection is a class for a widget wrapping a list of buttons that makes the buttons seemingly
                 stick together by replacing the double border between them with a single border.
             */
-            .button-collection > .button:not(:last-child) {
+            .button-collection > .text-button:not(:last-child) {
                 border-right: 0;
                 border-top-right-radius: 0;
                 border-bottom-right-radius: 0;
             }
 
-            .button-collection > .button:not(:first-child) {
+            .button-collection > .text-button:not(:first-child) {
                 border-top-left-radius: 0;
                 border-bottom-left-radius: 0;
             }

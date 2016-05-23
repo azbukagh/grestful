@@ -1,5 +1,6 @@
 ===== ?.?.? (not released yet)
     - Fixed issues with DMD 2.071.0.
+    - Fixed headerbar button styling issues in GTK 3.20.
     - Pressing the return key whilst in the input fields in popovers will now confirm them.
     - Bumped GtkD to 3.3, which wraps GTK 3.20 (no 3.18 or 3.20 features are being used, though).
     - Ensure a pointer doesn't get collected too soon, which in theory could lead to a crash during transfer.
