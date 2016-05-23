@@ -6,12 +6,15 @@ module Generic.Utility;
 
 import gtk.Widget;
 
+import gdk.Threads;
+
 import std.conv;
 import std.array;
 import std.string;
 import std.typecons;
 import std.algorithm;
 
+import core.memory;
 import core.stdc.string;
 
 import glib.Variant;

@@ -10,6 +10,8 @@ import std.conv : to;
 import std.parallelism;
 import std.typecons : Nullable;
 
+import etc.c.curl;
+
 import Generic.Utility;
 
 /**

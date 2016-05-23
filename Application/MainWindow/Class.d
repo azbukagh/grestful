@@ -6,6 +6,9 @@ module Application.MainWindow.Class;
 
 // import std.experimental.logger;
 
+import std.conv : to;
+import std.string;
+
 import gio.Menu;
 import gio.SimpleAction;
 

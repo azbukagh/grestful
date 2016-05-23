@@ -4,6 +4,9 @@
  */
 module Application.RequestSerializer;
 
+import std.conv : to;
+import std.string;
+
 import glib.KeyFile;
 
 import Generic.Request;
