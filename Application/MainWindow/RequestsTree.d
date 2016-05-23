@@ -15,6 +15,7 @@ import gdk.Event;
 
 static import gtk.Builder;
 
+import Generic.Utility;
 import Generic.Signal : Signal;
 import Generic.Buildable : Buildable;
 import Generic.Mixins.ShortcutKeyProvider;

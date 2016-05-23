@@ -26,7 +26,7 @@ protected:
      *
      * @return Whether or not the event should propagate.
      */
-    bool onKeyPress(Event e, Widget w)
+    bool onKeyPress(Event e, gtk.Widget.Widget w)
     {
         uint key;
         GdkModifierType modifier;

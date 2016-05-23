@@ -9,8 +9,8 @@ sourcePaths "./Application/"
 importPaths "./Application/"
 mainSourceFile "Application/Main.d"
 
-dependency "gtk-d:gtkd" version="~>3.2.0"
-dependency "gtk-d:sv"   version="~>3.2.0"
+dependency "gtk-d:gtkd" version="~>3.3.0"
+dependency "gtk-d:sv"   version="~>3.3.0"
 dependency "grestful:generic" version="1.0.0"
 
 libs "curl"
@@ -24,5 +24,5 @@ subPackage {
     sourcePaths "./Generic/"
     importPaths "./Generic/"
 
-    dependency "gtk-d:gtkd" version="~>3.2.0"
+    dependency "gtk-d:gtkd" version="~>3.3.0"
 }

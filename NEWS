@@ -1,6 +1,7 @@
 ===== ?.?.? (not released yet)
-    - Bumped GtkD to 3.2, which wraps GTK 3.18 (no 3.18 features are being used, though).
+    - Fixed issues with DMD 2.071.0.
     - Pressing the return key whilst in the input fields in popovers will now confirm them.
+    - Bumped GtkD to 3.3, which wraps GTK 3.20 (no 3.18 or 3.20 features are being used, though).
     - Ensure a pointer doesn't get collected too soon, which in theory could lead to a crash during transfer.
 
 ===== 1.1.1 (10 October 2015)

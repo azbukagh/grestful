@@ -12,7 +12,7 @@ import std.string;
 import std.typecons;
 import std.algorithm;
 
-import std.c.string;
+import core.stdc.string;
 
 import glib.Variant;
 import glib.KeyFile;
