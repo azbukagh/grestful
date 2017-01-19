@@ -1,7 +1,7 @@
 name "grestful"
 targetType "executable"
 description "A simple RESTful API client written in GTK 3."
-copyright "Copyright © 2015, The grestful team"
+copyright "Copyright © 2015-2017, The grestful team"
 authors "The grestful team"
 license "MPL-2.0"
 
