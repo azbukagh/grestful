@@ -18,8 +18,8 @@ immutable string APPLICATION_AUTHOR      = "The grestful team";
 immutable string APPLICATION_COPYRIGHT   = "Copyright \xc2\xa9 2015-2017 " ~ APPLICATION_AUTHOR;
 immutable string APPLICATION_ID          = "grestful.grestful";
 immutable string APPLICATION_COMMENTS    = "A simple RESTful API client written in GTK 3.";
-immutable string APPLICATION_LICENSE     =  "This Source Code Form is subject to the terms of the Mozilla Public "
-    "License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at "
+immutable string APPLICATION_LICENSE     =  "This Source Code Form is subject to the terms of the Mozilla Public " ~
+    "License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at " ~
     "http://mozilla.org/MPL/2.0/.";
 
 immutable string[] APPLICATION_AUTHORS     = ["The grestful team"];
