@@ -1,4 +1,4 @@
-===== ?.?.? (not released yet)
+===== 1.2.0 (23 May 2016)
     - Fixed issues with DMD 2.071.0.
     - Fixed headerbar button styling issues in GTK 3.20.
     - Pressing the return key whilst in the input fields in popovers will now confirm them.
