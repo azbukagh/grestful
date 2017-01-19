@@ -13,6 +13,7 @@ import gio.Menu;
 import gio.SimpleAction;
 
 import glib.KeyFile;
+import glib.GException;
 
 import gtk.Box;
 import gtk.Entry;
@@ -164,6 +165,25 @@ public:
             if (language)
                 this.getWidget!SourceView("outputSourceView").getBuffer().setLanguage(language);
         }
+
+        bool maximized;
+        try {
+            maximized = file.getBoolean(groupName, "Maximized");
+        } catch(GException) {
+            maximized = false;
+        }
+        if (maximized)
+            this.getWidget!ApplicationWindow("mainWindow").maximize();
+
+        int w, h;
+        try {
+            w = file.getInteger(groupName, "Width");
+            h = file.getInteger(groupName, "Height");
+        } catch(GException) {
+            w, h = 0;
+        }
+        if ((w != 0) && (h != 0))
+            this.getWidget!ApplicationWindow("mainWindow").resize(w, h);
     }
 
     /**
@@ -222,6 +242,14 @@ public:
 
         if (outputLanguage)
             file.setString(groupName, "OutputLanguageId", outputLanguage.getId());
+
+        int w, h;
+        this.getWidget!ApplicationWindow("mainWindow").getSize(w, h);
+        file.setInteger(groupName, "Width", w);
+        file.setInteger(groupName, "Height", h);
+
+        if (this.getWidget!ApplicationWindow("mainWindow").isMaximized)
+            file.setBoolean(groupName, "Maximized", this.Widget.isMaximized);
     }
 
 protected:
