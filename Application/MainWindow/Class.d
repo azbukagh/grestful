@@ -13,7 +13,6 @@ import gio.Menu;
 import gio.SimpleAction;
 
 import glib.KeyFile;
-import glib.GException;
 
 import gtk.Box;
 import gtk.Entry;
@@ -166,22 +165,12 @@ public:
                 this.getWidget!SourceView("outputSourceView").getBuffer().setLanguage(language);
         }
 
-        bool maximized;
-        try {
-            maximized = file.getBoolean(groupName, "Maximized");
-        } catch(GException) {
-            maximized = false;
-        }
+        bool maximized = file.getBooleanDefault(groupName, "Maximized", false);
         if (maximized)
             this.getWidget!ApplicationWindow("mainWindow").maximize();
 
-        int w, h;
-        try {
-            w = file.getInteger(groupName, "Width");
-            h = file.getInteger(groupName, "Height");
-        } catch(GException) {
-            w, h = 0;
-        }
+        int w = file.getIntegerDefault(groupName, "Width", 0);
+        int h = file.getIntegerDefault(groupName, "Height", 0);
         if ((w != 0) && (h != 0))
             this.getWidget!ApplicationWindow("mainWindow").resize(w, h);
     }
