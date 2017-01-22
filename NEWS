@@ -1,4 +1,5 @@
 ===== 2.0.0 (Not yet released)
+    - GTK >= 3.20 is now a hard requirement.
     - The `<Primary>R` and `F5` keys will now submit the request.
     - Activating, i.e. via the return key, the URL entry will now automatically send the request.
     - Window state is now properly saved and restored. (thanks to [azbukagh](https://github.com/azbukagh))
