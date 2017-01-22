@@ -1082,6 +1082,8 @@
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes">Send a request using the current settings</property>
             <property name="margin_left">6</property>
+            <accelerator key="F5" signal="activate"/>
+            <accelerator key="r" signal="activate" modifiers="GDK_CONTROL_MASK"/>
           </object>
           <packing>
             <property name="pack_type">end</property>
