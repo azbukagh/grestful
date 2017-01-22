@@ -1053,6 +1053,7 @@
             <property name="can_focus">True</property>
             <property name="tooltip_text" translatable="yes">The URL to send the request to</property>
             <property name="hexpand">True</property>
+            <property name="input_purpose">url</property>
           </object>
         </child>
         <child>
