@@ -1,3 +1,7 @@
+===== 2.0.0 (Not yet released)
+    - Window state is now properly saved and restored. (thanks to [azbukagh](https://github.com/azbukagh))
+    - The header bar search field will now expand to its maximum width. (thanks to [azbukagh](https://github.com/azbukagh))
+
 ===== 1.3.0 (19 January 2017)
     - Update GtkD to 3.5.1. (thanks to [azbukagh](https://github.com/azbukagh))
     - Fix deprecations with 2.072.0. (thanks to [azbukagh](https://github.com/azbukagh))
