@@ -553,6 +553,7 @@
                               <object class="GtkLabel" id="label1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Request headers that are sent along with the request. Note that these are case insensitive.</property>
                                 <property name="label" translatable="yes">Request Headers</property>
                               </object>
                               <packing>
@@ -891,6 +892,7 @@
                               <object class="GtkLabel" id="label3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Response headers returned by the response from the server.</property>
                                 <property name="label" translatable="yes">Response headers</property>
                               </object>
                               <packing>
