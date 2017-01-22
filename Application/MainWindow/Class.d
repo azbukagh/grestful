@@ -628,11 +628,6 @@ protected:
         });
 
         this.Widget.addOnShow((Widget) {
-            //int w, h;
-            //this.getDefaultSize(w, h);
-            //this.widthCorrection  = w - editViewWidget.getAllocatedWidth();
-            //this.heightCorrection = h - editViewWidget.getAllocatedHeight();
-
             // By the time this function is executed (which is after the showAll just beneath here),
             // every other class will have registered their loading handlers.
             State.Instance.load();
