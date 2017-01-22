@@ -35,6 +35,8 @@ import gtk.TreeViewColumn;
 import gtk.CellRendererText;
 import gtk.ApplicationWindow;
 
+import gdk.Event;
+
 import gsv.SourceView;
 import gsv.SourceLanguage;
 import gsv.SourceStyleScheme;
@@ -253,6 +255,8 @@ protected:
 
         responseHeadersSortedListStore.setSortColumnId(0, SortType.ASCENDING);
 
+        this.getWidget!Entry("urlEntry").setActivatesDefault(true);
+
         this.setupInfoBar();
         this.setupPopovers();
         this.setupMethodCombobox();
@@ -441,6 +445,12 @@ protected:
 
         this.getWidget!Button("sendButton").addOnClicked((Button) { this.sendRequest(); });
         this.getWidget!Button("cancelButton").addOnClicked((Button) { this.cancelRequest(); });
+
+        this.getWidget!Entry("urlEntry").addOnFocusIn((Event t, Widget) {
+            this.getWidget("sendButton").grabDefault();
+
+            return EventPropagation.PROPAGATE;
+        });
     }
 
     /**
@@ -877,8 +887,7 @@ protected:
 
         this.request.sendAsync();
 
-        this.getWidget!Button("sendButton").hide();
-        this.getWidget!Button("cancelButton").show();
+        this.visuallyIndicateActiveRequest();
     }
 
     /**
@@ -891,10 +900,29 @@ protected:
         if (this.request)
             this.request.cancel();
 
-        this.getWidget!Button("cancelButton").hide();
-        this.getWidget!Button("sendButton").show();
+        this.visuallyIndicateNoActiveRequest();
 
         this.getWidget!Stack("responseStack").setVisibleChild(this.getWidget("requestNoteBox"));
+    }
+
+    /**
+     * Ensures the window is in such a state that it is clear to the user that a request is active.
+     */
+    void visuallyIndicateActiveRequest()
+    {
+        this.getWidget!Button("sendButton").hide();
+        this.getWidget!Button("cancelButton").show();
+        this.getWidget!Button("cancelButton").grabDefault();
+    }
+
+    /**
+     * Ensures the window is in such a state that it is clear to the user that no request is active.
+     */
+    void visuallyIndicateNoActiveRequest()
+    {
+        this.getWidget!Button("cancelButton").hide();
+        this.getWidget!Button("sendButton").show();
+        this.getWidget!Button("sendButton").grabDefault();
     }
 
 protected:
@@ -1029,8 +1057,7 @@ protected:
         this.request = null;
         this.responseDataBuffer = null;
 
-        this.getWidget!Button("cancelButton").hide();
-        this.getWidget!Button("sendButton").show();
+        this.visuallyIndicateNoActiveRequest();
 
         this.getWidget!Stack("responseStack").setVisibleChild(this.getWidget("responsePaned"));
     }

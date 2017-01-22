@@ -1061,6 +1061,7 @@
             <property name="label" translatable="yes">Cancel</property>
             <property name="name">6</property>
             <property name="can_focus">True</property>
+            <property name="can_default">True</property>
             <property name="receives_default">True</property>
             <property name="no_show_all">True</property>
             <property name="tooltip_text" translatable="yes">Abort the currently running request</property>
@@ -1076,6 +1077,8 @@
             <property name="label" translatable="yes">Send</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="has_default">True</property>
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes">Send a request using the current settings</property>
             <property name="margin_left">6</property>
