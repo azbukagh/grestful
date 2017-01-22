@@ -458,6 +458,7 @@
                               <object class="GtkLabel" id="label4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">The data to send along with the request.</property>
                                 <property name="label" translatable="yes">Request Data</property>
                               </object>
                               <packing>
@@ -516,7 +517,6 @@
                               <object class="GtkSourceView" id="dataSourceView">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">The data to send along with the request.</property>
                                 <property name="left_margin">2</property>
                                 <property name="right_margin">2</property>
                                 <property name="monospace">True</property>
@@ -800,6 +800,7 @@
                                   <object class="GtkLabel" id="label2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">Response data received from the receiver of the request.</property>
                                     <property name="label" translatable="yes">Response Output</property>
                                   </object>
                                   <packing>
@@ -857,7 +858,6 @@
                                   <object class="GtkSourceView" id="outputSourceView">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Response data received from the receiver of the request.</property>
                                     <property name="editable">False</property>
                                     <property name="left_margin">2</property>
                                     <property name="right_margin">2</property>
