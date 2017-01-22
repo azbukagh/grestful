@@ -164,6 +164,15 @@ public:
             if (language)
                 this.getWidget!SourceView("outputSourceView").getBuffer().setLanguage(language);
         }
+
+        bool maximized = file.getBooleanDefault(groupName, "Maximized", false);
+        if (maximized)
+            this.getWidget!ApplicationWindow("mainWindow").maximize();
+
+        int w = file.getIntegerDefault(groupName, "Width", 0);
+        int h = file.getIntegerDefault(groupName, "Height", 0);
+        if ((w != 0) && (h != 0))
+            this.getWidget!ApplicationWindow("mainWindow").resize(w, h);
     }
 
     /**
@@ -222,6 +231,14 @@ public:
 
         if (outputLanguage)
             file.setString(groupName, "OutputLanguageId", outputLanguage.getId());
+
+        int w, h;
+        this.getWidget!ApplicationWindow("mainWindow").getSize(w, h);
+        file.setInteger(groupName, "Width", w);
+        file.setInteger(groupName, "Height", h);
+
+        if (this.getWidget!ApplicationWindow("mainWindow").isMaximized)
+            file.setBoolean(groupName, "Maximized", this.Widget.isMaximized);
     }
 
 protected:
