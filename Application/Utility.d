@@ -34,7 +34,7 @@ immutable string APPLICATION_DESIGN_DIR;
  * The minimum required GTK version.
  */
 immutable uint GTK_VERSION_MAJOR = 3;
-immutable uint GTK_VERSION_MINOR = 16;
+immutable uint GTK_VERSION_MINOR = 20;
 immutable uint GTK_VERSION_PATCH = 0;
 
 /**
