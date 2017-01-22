@@ -232,10 +232,8 @@ public:
         if (outputLanguage)
             file.setString(groupName, "OutputLanguageId", outputLanguage.getId());
 
-        int w, h;
-        this.getWidget!ApplicationWindow("mainWindow").getSize(w, h);
-        file.setInteger(groupName, "Width", w);
-        file.setInteger(groupName, "Height", h);
+        file.setInteger(groupName, "Width", this.currentWidth);
+        file.setInteger(groupName, "Height", this.currentHeight);
 
         if (this.getWidget!ApplicationWindow("mainWindow").isMaximized)
             file.setBoolean(groupName, "Maximized", this.Widget.isMaximized);
@@ -623,6 +621,10 @@ protected:
     {
         this.Widget.addOnDestroy((Widget) {
             State.Instance.save();
+        });
+
+        this.Widget.addOnSizeAllocate((GdkRectangle*, Widget) {
+            this.Widget.getSize(this.currentWidth, this.currentHeight);
         });
 
         this.Widget.addOnShow((Widget) {
@@ -1086,4 +1088,9 @@ protected:
      * The request currently being sent.
      */
     Request request = null;
+
+    /**
+     * The active width and height of the window.
+     */
+    int currentWidth, currentHeight;
 }
